@@ -172,7 +172,7 @@ func NewExecutorActor(opts *ExecutorOptions) actor.Producer {
 			priceWatcherPID: opts.PriceWatcherPID,
 			logger: logger.NewLogger(
 				logger.TExc,
-				logger.ORANGE,
+				logger.DGREEN,
 				logger.WithToStdoutWriter(),
 				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
 			),

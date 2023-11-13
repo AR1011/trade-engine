@@ -2,7 +2,9 @@ package logger
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 )
 
@@ -57,10 +59,7 @@ func (w *ToFileWriter) Write(l *Log) error {
 		b = append(b, '\n')
 	}
 
-	f, err := os.OpenFile(w.FileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		return err
-	}
+	f, err := w.openFile()
 
 	defer f.Close()
 
@@ -68,6 +67,26 @@ func (w *ToFileWriter) Write(l *Log) error {
 		return err
 	}
 	return nil
+}
+
+func (w *ToFileWriter) openFile() (*os.File, error) {
+	f, err := os.OpenFile(w.FileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		if os.IsNotExist(err) {
+			fmt.Println("[WARN] Log file does not exist. Creating...]")
+			dir := filepath.Dir(w.FileName)
+			if mkdirErr := os.MkdirAll(dir, 0755); mkdirErr != nil {
+				return nil, mkdirErr
+			}
+			f, err = os.OpenFile(w.FileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			return nil, err
+		}
+	}
+	return f, nil
 }
 
 type ToStdoutWriter struct{}

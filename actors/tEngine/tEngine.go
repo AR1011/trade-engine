@@ -137,7 +137,7 @@ func NewTradeEngine() actor.Producer {
 			executorPIDs: make(map[string]*actor.PID),
 			logger: logger.NewLogger(
 				logger.TEng,
-				logger.PINK,
+				logger.DBLUE,
 				logger.WithToStdoutWriter(),
 				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
 			),

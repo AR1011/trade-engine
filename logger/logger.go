@@ -110,7 +110,7 @@ func argsToString(args []interface{}) []string {
 func (s *SLogger) toString(log *Log) string {
 	var logStr string
 
-	logStr += log.TypeColor + "[" + log.Type + "]"
+	logStr += BOLD + log.TypeColor + "[" + log.Type + "]" + NORMAL
 	logStr += WHITE + " [" + log.Time + "]"
 	logStr += log.MsgColor + " " + s.actorName + " "
 	logStr += pad(log.Msg) + WHITE

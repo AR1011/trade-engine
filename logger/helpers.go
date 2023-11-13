@@ -5,20 +5,20 @@ import (
 )
 
 const (
-	GREEN  = "\033[32m"
-	BLUE   = "\033[34m"
-	RED    = "\033[31m"
-	ORANGE = "\033[33m"
-	PURPLE = "\033[35m"
-	YELLOW = "\033[93m"
-	PINK   = "\033[95m"
-	WHITE  = "\033[0m"
+	DBLUE   = "\u001b[38;2;0;51;204m"
+	DGREEN  = "\033[38;2;0;153;0m"
+	DPURPLE = "\033[38;2;102;0;153m"
+	GREEN   = "\033[32m"
+	BLUE    = "\033[34m"
+	RED     = "\033[31m"
+	ORANGE  = "\033[33m"
+	PURPLE  = "\033[35m"
+	YELLOW  = "\033[93m"
+	PINK    = "\033[95m"
+	WHITE   = "\033[0m"
+	BOLD    = "\u001b[1m"
+	NORMAL  = "\u001b[0m"
 )
-
-func Pre(a string, col string) string {
-	a = col + a + WHITE
-	return a
-}
 
 var (
 	PWat = "[ PRICE  WATCHER ]"
@@ -27,7 +27,7 @@ var (
 )
 
 func pad(s string) string {
-	l := 45
+	l := 40
 
 	paddedString := " " + s
 	if len(paddedString) > l {
@@ -42,5 +42,5 @@ func pad(s string) string {
 }
 
 func GetTime() string {
-	return time.Now().Format("15:04:05.000")
+	return time.Now().Format(time.RFC1123)
 }
