@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/AR1011/trade-engine/utils"
 	"github.com/anthdm/hollywood/actor"
 )
 
@@ -45,7 +46,7 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 	case actor.Started:
 
 	case actor.Initialized:
-		slog.Info("[PRICE WATCHER] Init Price Actor", "ticker", pw.ticker)
+		slog.Info(utils.PWat+utils.PadG("Init Price Actor"), "ticker", pw.ticker)
 
 		// start updating the price
 		go pw.init()
@@ -55,10 +56,10 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 		pw.lastCall = time.Now().UnixMilli()
 
 	case actor.Stopped:
-		slog.Info("[PRICE WATCHER] Stopping Price Actor", "ticker", pw.ticker)
+		slog.Info(utils.PWat+utils.PadG("Stopped Price Actor"), "ticker", pw.ticker)
 
 	case FetchPriceRequest:
-		slog.Info("[PRICE WATCHER] Fetching Price Request", "ticker", pw.ticker)
+		slog.Info(utils.PWat+utils.PadG("Fetching Price Request"), "ticker", pw.ticker)
 
 		// update last called time
 		pw.lastCall = time.Now().UnixMilli()
@@ -70,7 +71,7 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 		})
 
 	default:
-		slog.Warn("[PRICE WATCHER] Got Invalid Message Type", "ticker", pw.ticker, "type", reflect.TypeOf(msg))
+		slog.Warn(utils.PWat+utils.PadG("Got Invalid Message Type"), "ticker", pw.ticker, "type", reflect.TypeOf(msg))
 
 		_ = msg
 	}
@@ -96,6 +97,16 @@ func (pw *priceWatcher) init() {
 func (pw *priceWatcher) Kill() {
 	// send kill request to the trade engine so it can remove it from maps
 	// and poision the actor
+
+	// make sure tradeEnginePID and actorEngine are safe
+	if pw.tradeEnginePID == nil {
+		slog.Error(utils.PWat+utils.PadG("tradeEnginePID is <nil>"), "ticker", pw.ticker)
+	}
+
+	if pw.actorEngine == nil {
+		slog.Error(utils.PWat+utils.PadG("actorEngine is <nil>"), "ticker", pw.ticker)
+	}
+
 	pw.actorEngine.Send(pw.tradeEnginePID, &PriceWatcherKillRequest{Ticker: pw.ticker})
 }
 

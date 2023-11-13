@@ -2,9 +2,11 @@ package executor
 
 import (
 	"log/slog"
+	"reflect"
 	"time"
 
 	"github.com/AR1011/trade-engine/actors/price"
+	"github.com/AR1011/trade-engine/utils"
 	"github.com/anthdm/hollywood/actor"
 )
 
@@ -56,7 +58,7 @@ type tradeExecutor struct {
 func (te *tradeExecutor) Receive(c *actor.Context) {
 	switch msg := c.Message().(type) {
 	case actor.Initialized:
-		slog.Info("[TRADE EXECUTOR] Init Executor Actor", "id", te.id, "wallet", te.wallet)
+		slog.Info(utils.TExc+utils.PadP("Init Trade Executor Actor"), "id", te.id, "wallet", te.wallet)
 
 		// set flag for goroutine
 		te.active = true
@@ -68,11 +70,11 @@ func (te *tradeExecutor) Receive(c *actor.Context) {
 		te.tradeEnginePID = c.GetPID("trade-engine")
 
 	case actor.Stopped:
-		slog.Info("[TRADE EXECUTOR] Stopping Trade Executor Actor", "id", te.id, "wallet", te.wallet)
+		slog.Info(utils.TExc+utils.PadP("Stopped Trade Executor Actor"), "id", te.id, "wallet", te.wallet)
 		te.active = false
 
 	case TradeInfoRequest:
-		slog.Info("[TRADE EXECUTOR] Stopping Trade Executor Actor", "id", te.id, "wallet", te.wallet)
+		slog.Info(utils.TExc+utils.PadP("Got TradeInfoRequest"), "id", te.id, "wallet", te.wallet)
 		te.tradeInfo(c)
 
 	default:
@@ -100,7 +102,7 @@ func (te *tradeExecutor) init(c *actor.Context) {
 		time.Sleep(time.Second * 5)
 
 		if (te.priceWatcherPID == nil) || (te.priceWatcherPID == &actor.PID{}) {
-			slog.Error("[TRADE EXECUTOR] PriceWatcherPID is nil")
+			slog.Error(utils.TExc + utils.PadP("priceWatcherPID is <nil>"))
 			return
 		}
 
@@ -111,15 +113,15 @@ func (te *tradeExecutor) init(c *actor.Context) {
 		result, err := response.Result()
 		if err != nil {
 			// fuck!!
-			slog.Error("[TRADE EXECUTOR] Error getting result t", "error", err.Error())
+			slog.Error(utils.TExc+utils.PadP("Error getting price response"), "error", err.Error())
 			return
 		}
 
 		switch r := result.(type) {
 		case *price.FetchPriceResponse:
-			slog.Info("[TRADE EXECUTOR] Got price result", "price", r.Price)
+			slog.Info(utils.TExc+utils.PadP("Got Price Response"), "price", r.Price)
 		default:
-			slog.Warn("[TRADE EXECUTOR] Got Unhandled Type")
+			slog.Warn(utils.TExc+utils.PadP("Got Invalid Type from priceWatcher"), "type", reflect.TypeOf(r))
 
 		}
 
@@ -137,12 +139,22 @@ func (te *tradeExecutor) tradeInfo(c *actor.Context) {
 
 func (te *tradeExecutor) Finished() {
 
-	slog.Info("[TRADE EXECUTOR] Finished", "id", te.id)
+	slog.Info(utils.TExc+utils.PadP("Finished"), "id", te.id)
 	// set the flag to flase so goroutine returns
 	te.active = false
 
 	// send kill request to the trade engine so it can remove it from maps
 	// and poision the actor
+
+	// make sure tradeEnginePID and actorEngine are safe
+	if te.tradeEnginePID == nil {
+		slog.Error(utils.TExc + utils.PadP("tradeEnginePID is <nil>"))
+	}
+
+	if te.actorEngine == nil {
+		slog.Error(utils.TExc + utils.PadP("actorEngine is <nil>"))
+	}
+
 	te.actorEngine.Send(te.tradeEnginePID, &TradeExecutorKillRequest{ID: te.id})
 }
 

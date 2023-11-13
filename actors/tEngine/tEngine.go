@@ -6,6 +6,7 @@ import (
 
 	"github.com/AR1011/trade-engine/actors/executor"
 	"github.com/AR1011/trade-engine/actors/price"
+	"github.com/AR1011/trade-engine/utils"
 	"github.com/anthdm/hollywood/actor"
 )
 
@@ -34,21 +35,21 @@ func (t *tradeEngine) Receive(c *actor.Context) {
 		// should propogate to children and kill them
 
 	case actor.Initialized:
-		slog.Info("[TRADE ENGINE] Init Trade Engine Actor")
+		slog.Info(utils.TEng + utils.PadO("Init Trade Engine"))
 
 		_ = msg
 
 	case *TradeOrderRequest:
 		// got new trade order, create the executor
-		slog.Info("[TRADE ENGINE] Got New TradeOrderRequest")
+		slog.Info(utils.TEng+utils.PadO("Got New Trade Order"), "id", msg.TradeID, "wallet", msg.Wallet)
 		t.spawnExecutor(msg, c)
 
 	case *price.PriceWatcherKillRequest:
-		slog.Info("[TRADE ENGINE] Killing Inactive Price Watcher")
+		slog.Info(utils.TEng+utils.PadO("Killing Price Watcher"), "ticker", msg.Ticker)
 		t.killPriceWatcher(msg, c)
 
 	case *CancelOrderRequest:
-		slog.Info("[TRADE ENGINE] Cancelling Order")
+		slog.Info(utils.TEng+utils.PadO("Killing Trade Executor"), "id", msg.ID)
 		t.killTradeExecutor(msg, c)
 
 	}
@@ -84,9 +85,12 @@ func (t *tradeEngine) ensurePriceStream(order *TradeOrderRequest, c *actor.Conte
 
 	// check if there is an existing PID for the same ticker
 	if pid, found := t.executorPIDs[ticker]; found {
-		slog.Info("[TRADE ENGINE] Found Existing Price Watcher", "ticker", ticker)
+
+		slog.Info(utils.TEng+utils.PadO("Found Existing Price Watcher"), "ticker", ticker)
 		return pid
+
 	} else {
+
 		// if not then create new price watcher
 		options := price.PriceOptions{
 			Ticker: ticker,
@@ -100,7 +104,7 @@ func (t *tradeEngine) ensurePriceStream(order *TradeOrderRequest, c *actor.Conte
 
 		// store the pid
 		t.executorPIDs[ticker] = pid
-		slog.Info("[TRADE ENGINE] Spawned New Price Watcher", "ticker", ticker)
+		slog.Info(utils.TEng+utils.PadO("Spawned New Price Watcher"), "ticker", ticker)
 		return pid
 	}
 }
