@@ -1,12 +1,11 @@
 package executor
 
 import (
-	"log/slog"
 	"reflect"
 	"time"
 
 	"github.com/AR1011/trade-engine/actors/price"
-	"github.com/AR1011/trade-engine/utils"
+	"github.com/AR1011/trade-engine/logger"
 	"github.com/anthdm/hollywood/actor"
 )
 
@@ -42,6 +41,7 @@ type tradeExecutor struct {
 	actorEngine     *actor.Engine
 	tradeEnginePID  *actor.PID
 	priceWatcherPID *actor.PID
+	logger          logger.Logger
 	status          string
 	ticker          string
 	token0          string
@@ -58,7 +58,7 @@ type tradeExecutor struct {
 func (te *tradeExecutor) Receive(c *actor.Context) {
 	switch msg := c.Message().(type) {
 	case actor.Initialized:
-		slog.Info(utils.TExc+utils.PadP("Init Trade Executor Actor"), "id", te.id, "wallet", te.wallet)
+		te.logger.Info("Init Trade Executor Actor", "id", te.id, "wallet", te.wallet)
 
 		// set flag for goroutine
 		te.active = true
@@ -70,11 +70,11 @@ func (te *tradeExecutor) Receive(c *actor.Context) {
 		go te.init(c)
 
 	case actor.Stopped:
-		slog.Info(utils.TExc+utils.PadP("Stopped Trade Executor Actor"), "id", te.id, "wallet", te.wallet)
+		te.logger.Info("Stopped Trade Executor Actor", "id", te.id, "wallet", te.wallet)
 		te.active = false
 
 	case TradeInfoRequest:
-		slog.Info(utils.TExc+utils.PadP("Got TradeInfoRequest"), "id", te.id, "wallet", te.wallet)
+		te.logger.Info("Got TradeInfoRequest", "id", te.id, "wallet", te.wallet)
 		te.tradeInfo(c)
 
 	default:
@@ -103,7 +103,7 @@ func (te *tradeExecutor) init(c *actor.Context) {
 		time.Sleep(time.Second * 5)
 
 		if (te.priceWatcherPID == nil) || (te.priceWatcherPID == &actor.PID{}) {
-			slog.Error(utils.TExc + utils.PadP("priceWatcherPID is <nil>"))
+			te.logger.Error("priceWatcherPID is <nil>")
 			return
 		}
 
@@ -114,15 +114,15 @@ func (te *tradeExecutor) init(c *actor.Context) {
 		result, err := response.Result()
 		if err != nil {
 			// fuck!!
-			slog.Error(utils.TExc+utils.PadP("Error getting price response"), "error", err.Error())
+			te.logger.Error("Error getting price response", "error", err.Error())
 			return
 		}
 
 		switch r := result.(type) {
 		case *price.FetchPriceResponse:
-			slog.Info(utils.TExc+utils.PadP("Got Price Response"), "price", r.Price)
+			te.logger.Info("Got Price Response", "price", r.Price)
 		default:
-			slog.Warn(utils.TExc+utils.PadP("Got Invalid Type from priceWatcher"), "type", reflect.TypeOf(r))
+			te.logger.Warn("Got Invalid Type from priceWatcher", "type", reflect.TypeOf(r))
 
 		}
 		i++
@@ -139,7 +139,7 @@ func (te *tradeExecutor) tradeInfo(c *actor.Context) {
 
 func (te *tradeExecutor) Finished() {
 
-	slog.Info(utils.TExc+utils.PadP("Finished"), "id", te.id)
+	te.logger.Info("Finished", "id", te.id)
 	// set the flag to flase so goroutine returns
 	te.active = false
 
@@ -148,11 +148,12 @@ func (te *tradeExecutor) Finished() {
 
 	// make sure tradeEnginePID and actorEngine are safe
 	if te.tradeEnginePID == nil {
-		slog.Error(utils.TExc + utils.PadP("tradeEnginePID is <nil>"))
+		te.logger.Error("tradeEnginePID is <nil>")
 	}
 
 	if te.actorEngine == nil {
-		slog.Error(utils.TExc + utils.PadP("actorEngine is <nil>"))
+		te.logger.Error("actorEngine is <nil>")
+
 	}
 
 	te.actorEngine.Send(te.tradeEnginePID, &TradeExecutorKillRequest{ID: te.id})
@@ -169,6 +170,12 @@ func NewExecutorActor(opts *ExecutorOptions) actor.Producer {
 			wallet:          opts.Wallet,
 			pk:              opts.Pk,
 			priceWatcherPID: opts.PriceWatcherPID,
+			logger: logger.NewLogger(
+				logger.TExc,
+				logger.ORANGE,
+				logger.WithToStdoutWriter(),
+				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
+			),
 		}
 	}
 }

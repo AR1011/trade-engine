@@ -1,11 +1,10 @@
 package price
 
 import (
-	"log/slog"
 	"reflect"
 	"time"
 
-	"github.com/AR1011/trade-engine/utils"
+	"github.com/AR1011/trade-engine/logger"
 	"github.com/anthdm/hollywood/actor"
 )
 
@@ -37,6 +36,8 @@ type priceWatcher struct {
 	lastPrice      float64 // will use decimal in real
 	updatedAt      int64
 	lastCall       int64
+	callCount      uint64
+	logger         logger.Logger
 	// will contain more stuff
 }
 
@@ -46,7 +47,7 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 	case actor.Started:
 
 	case actor.Initialized:
-		slog.Info(utils.PWat+utils.PadG("Init Price Actor"), "ticker", pw.ticker)
+		pw.logger.Info("Init Price Actor", "ticker", pw.ticker)
 
 		pw.actorEngine = c.Engine()
 		pw.tradeEnginePID = c.GetPID("trade-engine")
@@ -56,13 +57,14 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 		go pw.init()
 
 	case actor.Stopped:
-		slog.Info(utils.PWat+utils.PadG("Stopped Price Actor"), "ticker", pw.ticker)
+		pw.logger.Info("Stopped Price Actor", "ticker", pw.ticker)
 
 	case FetchPriceRequest:
-		slog.Info(utils.PWat+utils.PadG("Fetching Price Request"), "ticker", pw.ticker)
+		pw.logger.Info("Fetching Price Request", "ticker", pw.ticker)
 
 		// update last called time
 		pw.lastCall = time.Now().UnixMilli()
+		pw.callCount++
 
 		// respond with the lastest price
 		c.Respond(&FetchPriceResponse{
@@ -71,7 +73,7 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 		})
 
 	default:
-		slog.Warn(utils.PWat+utils.PadG("Got Invalid Message Type"), "ticker", pw.ticker, "type", reflect.TypeOf(msg))
+		pw.logger.Warn("Got Invalid Message Type", "ticker", pw.ticker, "type", reflect.TypeOf(msg))
 
 		_ = msg
 	}
@@ -82,6 +84,8 @@ func (pw *priceWatcher) init() {
 	for {
 		// check if the last call was more than 30 seconds ago
 		if pw.lastCall < time.Now().UnixMilli()-(time.Second.Milliseconds()*30) {
+			pw.logger.Info("Inactivity: Killing Price Watcher", "ticker", pw.ticker, "callCount", pw.callCount)
+
 			// if no call in 30 seconds => kill itself
 			pw.Kill()
 			return // stops goroutine
@@ -100,11 +104,11 @@ func (pw *priceWatcher) Kill() {
 
 	// make sure tradeEnginePID and actorEngine are safe
 	if pw.tradeEnginePID == nil {
-		slog.Error(utils.PWat+utils.PadG("tradeEnginePID is <nil>"), "ticker", pw.ticker)
+		pw.logger.Error("tradeEnginePID is <nil>", "ticker", pw.ticker)
 	}
 
 	if pw.actorEngine == nil {
-		slog.Error(utils.PWat+utils.PadG("actorEngine is <nil>"), "ticker", pw.ticker)
+		pw.logger.Error("actorEngine is <nil>", "ticker", pw.ticker)
 	}
 
 	pw.actorEngine.Send(pw.tradeEnginePID, &PriceWatcherKillRequest{Ticker: pw.ticker})
@@ -117,6 +121,11 @@ func NewPriceActor(opts PriceOptions) actor.Producer {
 			token0: opts.Token0,
 			token1: opts.Token1,
 			chain:  opts.Chain,
+			logger: logger.NewLogger(logger.PWat,
+				logger.ORANGE,
+				logger.WithToStdoutWriter(),
+				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
+			),
 		}
 	}
 }

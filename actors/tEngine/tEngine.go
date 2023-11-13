@@ -2,17 +2,17 @@ package tEngine
 
 import (
 	"fmt"
-	"log/slog"
 
 	"github.com/AR1011/trade-engine/actors/executor"
 	"github.com/AR1011/trade-engine/actors/price"
-	"github.com/AR1011/trade-engine/utils"
+	"github.com/AR1011/trade-engine/logger"
 	"github.com/anthdm/hollywood/actor"
 )
 
 type tradeEngine struct {
 	pricePIDs    map[string]*actor.PID
 	executorPIDs map[string]*actor.PID
+	logger       logger.Logger
 }
 
 type TradeOrderRequest struct {
@@ -35,20 +35,20 @@ func (t *tradeEngine) Receive(c *actor.Context) {
 		// should propogate to children and kill them
 
 	case actor.Initialized:
-		slog.Info(utils.TEng + utils.PadO("Init Trade Engine"))
+		t.logger.Info("Init Trade Engine")
 		_ = msg
 
 	case *TradeOrderRequest:
 		// got new trade order, create the executor
-		slog.Info(utils.TEng+utils.PadO("Got New Trade Order"), "id", msg.TradeID, "wallet", msg.Wallet)
+		t.logger.Info("Got New Trade Order", "id", msg.TradeID, "wallet", msg.Wallet)
 		t.spawnExecutor(msg, c)
 
 	case *price.PriceWatcherKillRequest:
-		slog.Info(utils.TEng+utils.PadO("Killing Price Watcher"), "ticker", msg.Ticker)
+		t.logger.Info("Killing Price Watcher", "ticker", msg.Ticker)
 		t.killPriceWatcher(msg, c)
 
 	case *CancelOrderRequest:
-		slog.Info(utils.TEng+utils.PadO("Killing Trade Executor"), "id", msg.ID)
+		t.logger.Info("Killing Trade Executor", "id", msg.ID)
 		t.killTradeExecutor(msg, c)
 
 	}
@@ -83,7 +83,7 @@ func (t *tradeEngine) ensurePriceStream(order *TradeOrderRequest, c *actor.Conte
 	// check if there is an existing PID for the same ticker
 	if pid, found := t.executorPIDs[ticker]; found {
 
-		slog.Info(utils.TEng+utils.PadO("Found Existing Price Watcher"), "ticker", ticker)
+		t.logger.Info("Found Existing Price Watcher", "ticker", ticker)
 		return pid
 
 	} else {
@@ -101,7 +101,7 @@ func (t *tradeEngine) ensurePriceStream(order *TradeOrderRequest, c *actor.Conte
 
 		// store the pid
 		t.executorPIDs[ticker] = pid
-		slog.Info(utils.TEng+utils.PadO("Spawned New Price Watcher"), "ticker", ticker)
+		t.logger.Info("Spawned New Price Watcher", "ticker", ticker)
 		return pid
 	}
 }
@@ -135,6 +135,12 @@ func NewTradeEngine() actor.Producer {
 		return &tradeEngine{
 			pricePIDs:    make(map[string]*actor.PID),
 			executorPIDs: make(map[string]*actor.PID),
+			logger: logger.NewLogger(
+				logger.TEng,
+				logger.PINK,
+				logger.WithToStdoutWriter(),
+				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
+			),
 		}
 	}
 }

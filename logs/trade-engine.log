@@ -1,0 +1,108 @@
+{"type":"INFO","time":"21:29:14.383","timestamp":1699910954383,"msg":"Init Trade Engine","args":null}{"type":"INFO","time":"21:29:14.383","timestamp":1699910954383,"msg":"Got New Trade Order","args":["id","89cef05b-9675-4124-b445-98fc6b52ffa7","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}{"type":"INFO","time":"21:29:14.384","timestamp":1699910954384,"msg":"Init Price Actor","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:14.384","timestamp":1699910954384,"msg":"Spawned New Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:14.384","timestamp":1699910954384,"msg":"Init Trade Executor Actor","args":["id","89cef05b-9675-4124-b445-98fc6b52ffa7","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}{"type":"INFO","time":"21:29:14.384","timestamp":1699910954384,"msg":"Got New Trade Order","args":["id","2e487de3-e4b6-4bb4-a30f-e307f2c14e44","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}{"type":"INFO","time":"21:29:14.384","timestamp":1699910954384,"msg":"Found Existing Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:14.384","timestamp":1699910954384,"msg":"Init Trade Executor Actor","args":["id","2e487de3-e4b6-4bb4-a30f-e307f2c14e44","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}{"type":"INFO","time":"21:29:19.385","timestamp":1699910959385,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:19.385","timestamp":1699910959385,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:19.385","timestamp":1699910959385,"msg":"Got Price Response","args":["price",2]}{"type":"INFO","time":"21:29:19.386","timestamp":1699910959386,"msg":"Got Price Response","args":["price",2]}{"type":"INFO","time":"21:29:24.387","timestamp":1699910964387,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:24.387","timestamp":1699910964387,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:24.387","timestamp":1699910964387,"msg":"Got Price Response","args":["price",4]}{"type":"INFO","time":"21:29:24.387","timestamp":1699910964387,"msg":"Got Price Response","args":["price",5]}{"type":"INFO","time":"21:29:29.388","timestamp":1699910969388,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:29.389","timestamp":1699910969389,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:29.389","timestamp":1699910969389,"msg":"Got Price Response","args":["price",7]}{"type":"INFO","time":"21:29:29.389","timestamp":1699910969389,"msg":"Got Price Response","args":["price",7]}{"type":"INFO","time":"21:29:34.390","timestamp":1699910974390,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:34.390","timestamp":1699910974390,"msg":"Got Price Response","args":["price",9]}{"type":"INFO","time":"21:29:34.390","timestamp":1699910974390,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:34.391","timestamp":1699910974391,"msg":"Got Price Response","args":["price",10]}{"type":"INFO","time":"21:29:39.392","timestamp":1699910979392,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:39.392","timestamp":1699910979392,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:39.392","timestamp":1699910979392,"msg":"Got Price Response","args":["price",12]}{"type":"INFO","time":"21:29:39.392","timestamp":1699910979392,"msg":"Got Price Response","args":["price",12]}{"type":"INFO","time":"21:29:44.393","timestamp":1699910984393,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:44.394","timestamp":1699910984394,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}{"type":"INFO","time":"21:29:44.394","timestamp":1699910984394,"msg":"Got Price Response","args":["price",14]}{"type":"INFO","time":"21:29:44.394","timestamp":1699910984394,"msg":"Got Price Response","args":["price",14]}{"type":"INFO","time":"21:29:44.394","timestamp":1699910984394,"msg":"Finished","args":["id","2e487de3-e4b6-4bb4-a30f-e307f2c14e44"]}{"type":"INFO","time":"21:29:44.394","timestamp":1699910984394,"msg":"Finished","args":["id","89cef05b-9675-4124-b445-98fc6b52ffa7"]}{"type":"INFO","time":"21:33:06.402","timestamp":1699911186403,"msg":"Init Trade Engine","args":null}
+{"type":"INFO","time":"21:33:06.403","timestamp":1699911186403,"msg":"Got New Trade Order","args":["id","fa9e7eb0-05f4-45b3-aca5-56cd7de619a6","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:33:06.404","timestamp":1699911186404,"msg":"Init Price Actor","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:06.404","timestamp":1699911186404,"msg":"Spawned New Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:06.404","timestamp":1699911186404,"msg":"Init Trade Executor Actor","args":["id","fa9e7eb0-05f4-45b3-aca5-56cd7de619a6","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:33:06.404","timestamp":1699911186404,"msg":"Got New Trade Order","args":["id","de85a267-d519-46d7-afcb-75f2bff0a7ff","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:33:06.404","timestamp":1699911186404,"msg":"Found Existing Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:06.404","timestamp":1699911186404,"msg":"Init Trade Executor Actor","args":["id","de85a267-d519-46d7-afcb-75f2bff0a7ff","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:33:11.405","timestamp":1699911191405,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:11.405","timestamp":1699911191405,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:11.405","timestamp":1699911191405,"msg":"Got Price Response","args":["price",2]}
+{"type":"INFO","time":"21:33:11.405","timestamp":1699911191405,"msg":"Got Price Response","args":["price",2]}
+{"type":"INFO","time":"21:33:30.936","timestamp":1699911210937,"msg":"Init Trade Engine","args":null}
+{"type":"INFO","time":"21:33:30.937","timestamp":1699911210937,"msg":"Got New Trade Order","args":["id","bb169def-8c44-49b2-80ad-b404ff21e22d","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:33:30.937","timestamp":1699911210937,"msg":"Init Price Actor","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:30.937","timestamp":1699911210937,"msg":"Spawned New Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:30.937","timestamp":1699911210937,"msg":"Init Trade Executor Actor","args":["id","bb169def-8c44-49b2-80ad-b404ff21e22d","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:33:30.937","timestamp":1699911210937,"msg":"Got New Trade Order","args":["id","9f3ab03a-ea69-455f-a2e4-777634ae7c66","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:33:30.937","timestamp":1699911210937,"msg":"Found Existing Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:30.937","timestamp":1699911210937,"msg":"Init Trade Executor Actor","args":["id","9f3ab03a-ea69-455f-a2e4-777634ae7c66","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:33:35.939","timestamp":1699911215939,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:35.939","timestamp":1699911215939,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:35.939","timestamp":1699911215939,"msg":"Got Price Response","args":["price",2]}
+{"type":"INFO","time":"21:33:35.940","timestamp":1699911215940,"msg":"Got Price Response","args":["price",2]}
+{"type":"INFO","time":"21:33:40.940","timestamp":1699911220940,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:40.941","timestamp":1699911220941,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:40.941","timestamp":1699911220941,"msg":"Got Price Response","args":["price",5]}
+{"type":"INFO","time":"21:33:40.942","timestamp":1699911220942,"msg":"Got Price Response","args":["price",5]}
+{"type":"INFO","time":"21:33:45.943","timestamp":1699911225943,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:45.944","timestamp":1699911225944,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:45.944","timestamp":1699911225944,"msg":"Got Price Response","args":["price",7]}
+{"type":"INFO","time":"21:33:45.944","timestamp":1699911225944,"msg":"Got Price Response","args":["price",7]}
+{"type":"INFO","time":"21:33:50.945","timestamp":1699911230945,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:50.946","timestamp":1699911230946,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:50.946","timestamp":1699911230946,"msg":"Got Price Response","args":["price",10]}
+{"type":"INFO","time":"21:33:50.946","timestamp":1699911230946,"msg":"Got Price Response","args":["price",10]}
+{"type":"INFO","time":"21:33:55.946","timestamp":1699911235946,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:55.946","timestamp":1699911235946,"msg":"Got Price Response","args":["price",12]}
+{"type":"INFO","time":"21:33:55.946","timestamp":1699911235946,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:33:55.946","timestamp":1699911235946,"msg":"Got Price Response","args":["price",12]}
+{"type":"INFO","time":"21:34:00.947","timestamp":1699911240948,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:34:00.948","timestamp":1699911240948,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:34:00.948","timestamp":1699911240948,"msg":"Got Price Response","args":["price",14]}
+{"type":"INFO","time":"21:34:00.949","timestamp":1699911240949,"msg":"Got Price Response","args":["price",15]}
+{"type":"INFO","time":"21:34:00.949","timestamp":1699911240949,"msg":"Finished","args":["id","bb169def-8c44-49b2-80ad-b404ff21e22d"]}
+{"type":"INFO","time":"21:34:00.949","timestamp":1699911240949,"msg":"Finished","args":["id","9f3ab03a-ea69-455f-a2e4-777634ae7c66"]}
+{"type":"INFO","time":"21:34:30.962","timestamp":1699911270962,"msg":"Inactivity: Killing Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH","callCount",12]}
+{"type":"INFO","time":"21:34:30.962","timestamp":1699911270962,"msg":"Killing Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:36.890","timestamp":1699911396890,"msg":"Init Trade Engine","args":null}
+{"type":"INFO","time":"21:36:36.891","timestamp":1699911396891,"msg":"Got New Trade Order","args":["id","b99ddbd1-aa8d-4e27-89a6-b3ccb42eb5e6","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:36:36.891","timestamp":1699911396891,"msg":"Init Price Actor","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:36.891","timestamp":1699911396891,"msg":"Spawned New Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:36.891","timestamp":1699911396891,"msg":"Init Trade Executor Actor","args":["id","b99ddbd1-aa8d-4e27-89a6-b3ccb42eb5e6","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:36:36.891","timestamp":1699911396891,"msg":"Got New Trade Order","args":["id","2b508244-f174-4020-a31f-9d5194ec7ec4","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:36:36.892","timestamp":1699911396892,"msg":"Found Existing Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:36.892","timestamp":1699911396892,"msg":"Init Trade Executor Actor","args":["id","2b508244-f174-4020-a31f-9d5194ec7ec4","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:36:41.893","timestamp":1699911401893,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:41.894","timestamp":1699911401894,"msg":"Got Price Response","args":["price",2]}
+{"type":"INFO","time":"21:36:41.894","timestamp":1699911401894,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:41.894","timestamp":1699911401894,"msg":"Got Price Response","args":["price",2]}
+{"type":"INFO","time":"21:36:46.895","timestamp":1699911406895,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:46.896","timestamp":1699911406896,"msg":"Got Price Response","args":["price",5]}
+{"type":"INFO","time":"21:36:46.896","timestamp":1699911406896,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:46.896","timestamp":1699911406896,"msg":"Got Price Response","args":["price",5]}
+{"type":"INFO","time":"21:36:51.897","timestamp":1699911411897,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:51.898","timestamp":1699911411898,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:51.898","timestamp":1699911411898,"msg":"Got Price Response","args":["price",7]}
+{"type":"INFO","time":"21:36:51.898","timestamp":1699911411898,"msg":"Got Price Response","args":["price",7]}
+{"type":"INFO","time":"21:36:56.900","timestamp":1699911416900,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:56.900","timestamp":1699911416900,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:36:56.900","timestamp":1699911416900,"msg":"Got Price Response","args":["price",10]}
+{"type":"INFO","time":"21:36:56.901","timestamp":1699911416901,"msg":"Got Price Response","args":["price",10]}
+{"type":"INFO","time":"21:37:01.902","timestamp":1699911421902,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:01.903","timestamp":1699911421903,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:01.903","timestamp":1699911421903,"msg":"Got Price Response","args":["price",12]}
+{"type":"INFO","time":"21:37:01.903","timestamp":1699911421903,"msg":"Got Price Response","args":["price",12]}
+{"type":"INFO","time":"21:37:06.905","timestamp":1699911426905,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:06.905","timestamp":1699911426905,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:06.905","timestamp":1699911426905,"msg":"Got Price Response","args":["price",15]}
+{"type":"INFO","time":"21:37:06.906","timestamp":1699911426906,"msg":"Got Price Response","args":["price",15]}
+{"type":"INFO","time":"21:37:06.906","timestamp":1699911426906,"msg":"Finished","args":["id","b99ddbd1-aa8d-4e27-89a6-b3ccb42eb5e6"]}
+{"type":"INFO","time":"21:37:06.906","timestamp":1699911426906,"msg":"Finished","args":["id","2b508244-f174-4020-a31f-9d5194ec7ec4"]}
+{"type":"INFO","time":"21:37:36.917","timestamp":1699911456917,"msg":"Inactivity: Killing Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH","callCount",12]}
+{"type":"INFO","time":"21:37:36.918","timestamp":1699911456918,"msg":"Killing Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:41.689","timestamp":1699911461690,"msg":"Init Trade Engine","args":null}
+{"type":"INFO","time":"21:37:41.690","timestamp":1699911461690,"msg":"Got New Trade Order","args":["id","4f42cdce-cdda-426d-ad80-aad34bd4cf17","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:37:41.691","timestamp":1699911461691,"msg":"Init Price Actor","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:41.691","timestamp":1699911461691,"msg":"Spawned New Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:41.691","timestamp":1699911461691,"msg":"Init Trade Executor Actor","args":["id","4f42cdce-cdda-426d-ad80-aad34bd4cf17","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:37:41.691","timestamp":1699911461691,"msg":"Got New Trade Order","args":["id","a68347a0-8153-4aa7-9e7d-a94094b9675b","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:37:41.691","timestamp":1699911461691,"msg":"Found Existing Price Watcher","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:41.691","timestamp":1699911461691,"msg":"Init Trade Executor Actor","args":["id","a68347a0-8153-4aa7-9e7d-a94094b9675b","wallet","0x86bDd03525281214E2Ad874E616491D43c0233F2"]}
+{"type":"INFO","time":"21:37:46.693","timestamp":1699911466693,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:46.693","timestamp":1699911466693,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:46.693","timestamp":1699911466693,"msg":"Got Price Response","args":["price",2]}
+{"type":"INFO","time":"21:37:46.694","timestamp":1699911466694,"msg":"Got Price Response","args":["price",2]}
+{"type":"INFO","time":"21:37:51.694","timestamp":1699911471694,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:51.694","timestamp":1699911471694,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:51.694","timestamp":1699911471694,"msg":"Got Price Response","args":["price",4]}
+{"type":"INFO","time":"21:37:51.695","timestamp":1699911471695,"msg":"Got Price Response","args":["price",5]}
+{"type":"INFO","time":"21:37:56.696","timestamp":1699911476696,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:56.696","timestamp":1699911476696,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:37:56.696","timestamp":1699911476696,"msg":"Got Price Response","args":["price",7]}
+{"type":"INFO","time":"21:37:56.696","timestamp":1699911476696,"msg":"Got Price Response","args":["price",7]}
+{"type":"INFO","time":"21:38:01.697","timestamp":1699911481698,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:38:01.699","timestamp":1699911481699,"msg":"Fetching Price Request","args":["ticker","0x000000000000000000-0x111111111111111111-ETH"]}
+{"type":"INFO","time":"21:38:01.699","timestamp":1699911481699,"msg":"Got Price Response","args":["price",10]}
+{"type":"INFO","time":"21:38:01.699","timestamp":1699911481699,"msg":"Got Price Response","args":["price",10]}
