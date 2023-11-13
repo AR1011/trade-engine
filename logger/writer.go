@@ -73,7 +73,7 @@ func (w *ToFileWriter) openFile() (*os.File, error) {
 	f, err := os.OpenFile(w.FileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		if os.IsNotExist(err) {
-			fmt.Println("[WARN] Log file does not exist. Creating...]")
+			fmt.Println(ORANGE + "[WARN] " + "Log file does not exist. Creating..." + WHITE)
 			dir := filepath.Dir(w.FileName)
 			if mkdirErr := os.MkdirAll(dir, 0755); mkdirErr != nil {
 				return nil, mkdirErr

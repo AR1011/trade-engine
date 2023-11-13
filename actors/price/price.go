@@ -121,7 +121,8 @@ func NewPriceActor(opts PriceOptions) actor.Producer {
 			token0: opts.Token0,
 			token1: opts.Token1,
 			chain:  opts.Chain,
-			logger: logger.NewLogger(logger.PWat,
+			logger: logger.NewLogger(
+				logger.PWat,
 				logger.DPURPLE,
 				logger.WithToStdoutWriter(),
 				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
