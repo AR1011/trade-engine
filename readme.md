@@ -6,7 +6,7 @@
 
 ## There are 3 actor types:
 
-1. Trade Engine: There will just be one, that will be used to create and manage trades
+1. Trade Engine: There will just be one, that will be used to create and manage the Price Watcher and Trade Executor Actors
 
 2. Price Watcher: Actor that will get the price for a given ticker. There will only be one actor for each ticker to save on resources.
 
