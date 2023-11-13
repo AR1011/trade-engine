@@ -48,12 +48,12 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 	case actor.Initialized:
 		slog.Info(utils.PWat+utils.PadG("Init Price Actor"), "ticker", pw.ticker)
 
-		// start updating the price
-		go pw.init()
-
 		pw.actorEngine = c.Engine()
 		pw.tradeEnginePID = c.GetPID("trade-engine")
 		pw.lastCall = time.Now().UnixMilli()
+
+		// start updating the price
+		go pw.init()
 
 	case actor.Stopped:
 		slog.Info(utils.PWat+utils.PadG("Stopped Price Actor"), "ticker", pw.ticker)

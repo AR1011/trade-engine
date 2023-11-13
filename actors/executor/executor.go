@@ -63,11 +63,11 @@ func (te *tradeExecutor) Receive(c *actor.Context) {
 		// set flag for goroutine
 		te.active = true
 
-		// start the trade process
-		go te.init(c)
-
 		te.actorEngine = c.Engine()
 		te.tradeEnginePID = c.GetPID("trade-engine")
+
+		// start the trade process
+		go te.init(c)
 
 	case actor.Stopped:
 		slog.Info(utils.TExc+utils.PadP("Stopped Trade Executor Actor"), "id", te.id, "wallet", te.wallet)
@@ -84,10 +84,11 @@ func (te *tradeExecutor) Receive(c *actor.Context) {
 }
 
 func (te *tradeExecutor) init(c *actor.Context) {
+	// JUST A SAMPLE
+
 	var i int
 
 	for {
-
 		// check flag. Will be false if actor is killed
 		if !te.active {
 			return
@@ -124,7 +125,6 @@ func (te *tradeExecutor) init(c *actor.Context) {
 			slog.Warn(utils.TExc+utils.PadP("Got Invalid Type from priceWatcher"), "type", reflect.TypeOf(r))
 
 		}
-
 		i++
 	}
 }

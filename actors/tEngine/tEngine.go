@@ -36,7 +36,6 @@ func (t *tradeEngine) Receive(c *actor.Context) {
 
 	case actor.Initialized:
 		slog.Info(utils.TEng + utils.PadO("Init Trade Engine"))
-
 		_ = msg
 
 	case *TradeOrderRequest:
@@ -53,7 +52,6 @@ func (t *tradeEngine) Receive(c *actor.Context) {
 		t.killTradeExecutor(msg, c)
 
 	}
-
 }
 
 func (t *tradeEngine) spawnExecutor(msg *TradeOrderRequest, c *actor.Context) {
@@ -77,7 +75,6 @@ func (t *tradeEngine) spawnExecutor(msg *TradeOrderRequest, c *actor.Context) {
 
 	// store the pid
 	t.executorPIDs[msg.TradeID] = pid
-
 }
 
 func (t *tradeEngine) ensurePriceStream(order *TradeOrderRequest, c *actor.Context) *actor.PID {
