@@ -62,7 +62,7 @@ func (t *tradeEngine) spawnExecutor(msg *TradeOrderRequest, c *actor.Context) {
 	options := &executor.ExecutorOptions{
 		PriceWatcherPID: pricePID,
 		TradeID:         msg.TradeID,
-		Ticker:          fmt.Sprintf("%s/%s/%s", msg.Token0, msg.Token1, msg.Chain),
+		Ticker:          toTicker(msg.Token0, msg.Token1, msg.Chain),
 		Token0:          msg.Token0,
 		Token1:          msg.Token1,
 		Chain:           msg.Chain,
@@ -78,7 +78,7 @@ func (t *tradeEngine) spawnExecutor(msg *TradeOrderRequest, c *actor.Context) {
 }
 
 func (t *tradeEngine) ensurePriceStream(order *TradeOrderRequest, c *actor.Context) *actor.PID {
-	ticker := fmt.Sprintf("%s/%s/%s", order.Token0, order.Token1, order.Chain)
+	ticker := toTicker(order.Token0, order.Token1, order.Chain)
 
 	// check if there is an existing PID for the same ticker
 	if pid, found := t.executorPIDs[ticker]; found {
@@ -137,4 +137,8 @@ func NewTradeEngine() actor.Producer {
 			executorPIDs: make(map[string]*actor.PID),
 		}
 	}
+}
+
+func toTicker(token0, token1, chain string) string {
+	return fmt.Sprintf("%s-%s-%s", token0, token1, chain)
 }
