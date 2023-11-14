@@ -15,10 +15,6 @@ type PriceOptions struct {
 	Chain  string
 }
 
-type PriceWatcherKillRequest struct {
-	Ticker string
-}
-
 type FetchPriceRequest struct{}
 
 type FetchPriceResponse struct {
@@ -27,17 +23,17 @@ type FetchPriceResponse struct {
 }
 
 type priceWatcher struct {
-	actorEngine    *actor.Engine
-	tradeEnginePID *actor.PID
-	ticker         string
-	token0         string
-	token1         string
-	chain          string
-	lastPrice      float64 // will use decimal in real
-	updatedAt      int64
-	lastCall       int64
-	callCount      uint64
-	logger         logger.Logger
+	actorEngine *actor.Engine
+	PID         *actor.PID
+	ticker      string
+	token0      string
+	token1      string
+	chain       string
+	lastPrice   float64 // will use decimal in real
+	updatedAt   int64
+	lastCall    int64
+	callCount   uint64
+	logger      logger.Logger
 	// will contain more stuff
 }
 
@@ -50,8 +46,8 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 		pw.logger.Info("Init Price Actor", "ticker", pw.ticker)
 
 		pw.actorEngine = c.Engine()
-		pw.tradeEnginePID = c.GetPID("trade-engine")
 		pw.lastCall = time.Now().UnixMilli()
+		pw.PID = c.PID()
 
 		// start updating the price
 		go pw.init()
@@ -102,16 +98,10 @@ func (pw *priceWatcher) Kill() {
 	// send kill request to the trade engine so it can remove it from maps
 	// and poision the actor
 
-	// make sure tradeEnginePID and actorEngine are safe
-	if pw.tradeEnginePID == nil {
-		pw.logger.Error("tradeEnginePID is <nil>", "ticker", pw.ticker)
-	}
-
 	if pw.actorEngine == nil {
 		pw.logger.Error("actorEngine is <nil>", "ticker", pw.ticker)
 	}
-
-	pw.actorEngine.Send(pw.tradeEnginePID, &PriceWatcherKillRequest{Ticker: pw.ticker})
+	pw.actorEngine.Poison(pw.PID)
 }
 
 func NewPriceActor(opts PriceOptions) actor.Producer {

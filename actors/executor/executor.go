@@ -9,10 +9,6 @@ import (
 	"github.com/anthdm/hollywood/actor"
 )
 
-type TradeExecutorKillRequest struct {
-	ID string
-}
-
 // message to get trade info
 type TradeInfoRequest struct{}
 
@@ -39,7 +35,7 @@ type ExecutorOptions struct {
 type tradeExecutor struct {
 	id              string // uuid string
 	actorEngine     *actor.Engine
-	tradeEnginePID  *actor.PID
+	PID             *actor.PID
 	priceWatcherPID *actor.PID
 	logger          logger.Logger
 	status          string
@@ -64,7 +60,7 @@ func (te *tradeExecutor) Receive(c *actor.Context) {
 		te.active = true
 
 		te.actorEngine = c.Engine()
-		te.tradeEnginePID = c.GetPID("trade-engine")
+		te.PID = c.PID()
 
 		// start the trade process
 		go te.init(c)
@@ -138,8 +134,6 @@ func (te *tradeExecutor) tradeInfo(c *actor.Context) {
 }
 
 func (te *tradeExecutor) Finished() {
-
-	te.logger.Info("Finished", "id", te.id)
 	// set the flag to flase so goroutine returns
 	te.active = false
 
@@ -147,16 +141,12 @@ func (te *tradeExecutor) Finished() {
 	// and poision the actor
 
 	// make sure tradeEnginePID and actorEngine are safe
-	if te.tradeEnginePID == nil {
-		te.logger.Error("tradeEnginePID is <nil>")
-	}
 
 	if te.actorEngine == nil {
 		te.logger.Error("actorEngine is <nil>")
 
 	}
-
-	te.actorEngine.Send(te.tradeEnginePID, &TradeExecutorKillRequest{ID: te.id})
+	te.actorEngine.Poison(te.PID)
 }
 
 func NewExecutorActor(opts *ExecutorOptions) actor.Producer {

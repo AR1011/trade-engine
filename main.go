@@ -1,15 +1,20 @@
 package main
 
 import (
+	"log/slog"
+	"os"
 	"time"
 
 	"github.com/AR1011/trade-engine/actors/tEngine"
 	"github.com/anthdm/hollywood/actor"
+	"github.com/anthdm/hollywood/log"
+
 	"github.com/google/uuid"
 )
 
 func main() {
-	e := actor.NewEngine()
+	lh := log.NewHandler(os.Stdout, log.TextFormat, slog.LevelDebug)
+	e := actor.NewEngine(actor.Config{Logger: log.NewLogger("[engine]", lh)})
 
 	tradeEnginePID := e.Spawn(tEngine.NewTradeEngine(), "trade-engine")
 

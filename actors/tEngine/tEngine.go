@@ -10,9 +10,7 @@ import (
 )
 
 type tradeEngine struct {
-	pricePIDs    map[string]*actor.PID
-	executorPIDs map[string]*actor.PID
-	logger       logger.Logger
+	logger logger.Logger
 }
 
 type TradeOrderRequest struct {
@@ -43,14 +41,6 @@ func (t *tradeEngine) Receive(c *actor.Context) {
 		t.logger.Info("Got New Trade Order", "id", msg.TradeID, "wallet", msg.Wallet)
 		t.spawnExecutor(msg, c)
 
-	case *price.PriceWatcherKillRequest:
-		t.logger.Info("Killing Price Watcher", "ticker", msg.Ticker)
-		t.killPriceWatcher(msg, c)
-
-	case *CancelOrderRequest:
-		t.logger.Info("Killing Trade Executor", "id", msg.ID)
-		t.killTradeExecutor(msg, c)
-
 	}
 }
 
@@ -71,70 +61,33 @@ func (t *tradeEngine) spawnExecutor(msg *TradeOrderRequest, c *actor.Context) {
 	}
 
 	// spawn the actor
-	pid := c.SpawnChild(executor.NewExecutorActor(options), msg.TradeID)
+	c.SpawnChild(executor.NewExecutorActor(options), msg.TradeID)
 
-	// store the pid
-	t.executorPIDs[msg.TradeID] = pid
 }
 
 func (t *tradeEngine) ensurePriceStream(order *TradeOrderRequest, c *actor.Context) *actor.PID {
 	ticker := toTicker(order.Token0, order.Token1, order.Chain)
 
-	// check if there is an existing PID for the same ticker
-	if pid, found := t.executorPIDs[ticker]; found {
-
-		t.logger.Info("Found Existing Price Watcher", "ticker", ticker)
-		return pid
-
-	} else {
-
-		// if not then create new price watcher
-		options := price.PriceOptions{
-			Ticker: ticker,
-			Token0: order.Token0,
-			Token1: order.Token1,
-			Chain:  order.Chain,
-		}
-
-		// spawn the actor
-		pid = c.SpawnChild(price.NewPriceActor(options), ticker)
-
-		// store the pid
-		t.executorPIDs[ticker] = pid
-		t.logger.Info("Spawned New Price Watcher", "ticker", ticker)
+	pid := c.GetPID(fmt.Sprintf("trade-engine/%s", ticker))
+	if pid != nil {
 		return pid
 	}
-}
 
-func (t *tradeEngine) killPriceWatcher(req *price.PriceWatcherKillRequest, c *actor.Context) {
-	// check if pid map has the ticker
-	pid, ok := t.pricePIDs[req.Ticker]
-	if !ok {
-		// if not then return
-		return
+	options := price.PriceOptions{
+		Ticker: ticker,
+		Token0: order.Token0,
+		Token1: order.Token1,
+		Chain:  order.Chain,
 	}
 
-	// kill the actor
-	c.Engine().Poison(pid)
-}
-
-func (t *tradeEngine) killTradeExecutor(req *CancelOrderRequest, c *actor.Context) {
-	// check if pid map has the ticker
-	pid, ok := t.executorPIDs[req.ID]
-	if !ok {
-		// if not then return
-		return
-	}
-
-	// kill the actor
-	c.Engine().Poison(pid)
+	// spawn the actor
+	pid = c.SpawnChild(price.NewPriceActor(options), ticker)
+	return pid
 }
 
 func NewTradeEngine() actor.Producer {
 	return func() actor.Receiver {
 		return &tradeEngine{
-			pricePIDs:    make(map[string]*actor.PID),
-			executorPIDs: make(map[string]*actor.PID),
 			logger: logger.NewLogger(
 				logger.TEng,
 				logger.DBLUE,
