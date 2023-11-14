@@ -68,7 +68,7 @@ func (t *tradeEngine) spawnExecutor(msg *TradeOrderRequest, c *actor.Context) {
 func (t *tradeEngine) ensurePriceStream(order *TradeOrderRequest, c *actor.Context) *actor.PID {
 	ticker := toTicker(order.Token0, order.Token1, order.Chain)
 
-	pid := c.GetPID(fmt.Sprintf("trade-engine/%s", ticker))
+	pid := c.Child("trade-engine/" + ticker)
 	if pid != nil {
 		return pid
 	}

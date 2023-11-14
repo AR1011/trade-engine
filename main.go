@@ -18,26 +18,18 @@ func main() {
 
 	tradeEnginePID := e.Spawn(tEngine.NewTradeEngine(), "trade-engine")
 
-	order1 := &tEngine.TradeOrderRequest{
-		TradeID: uuid.New().String(),
-		Token0:  "0x000000000000000000",
-		Token1:  "0x111111111111111111",
-		Chain:   "ETH",
-		Wallet:  "0x86bDd03525281214E2Ad874E616491D43c0233F2",
-		Pk:      "289d095a1a421acb6498fecc656f5712d9aa95f63e8d9b321e162f28a2590f6f",
-	}
-	order2 := &tEngine.TradeOrderRequest{
-		TradeID: uuid.New().String(),
-		Token0:  "0x000000000000000000",
-		Token1:  "0x111111111111111111",
-		Chain:   "ETH",
-		Wallet:  "0x86bDd03525281214E2Ad874E616491D43c0233F2",
-		Pk:      "289d095a1a421acb6498fecc656f5712d9aa95f63e8d9b321e162f28a2590f6f",
-	}
+	for i := 0; i < 20; i++ {
+		o := &tEngine.TradeOrderRequest{
+			TradeID: uuid.New().String(),
+			Token0:  "0x000000000000000000",
+			Token1:  "0x111111111111111111",
+			Chain:   "ETH",
+			Wallet:  "0x86bDd03525281214E2Ad874E616491D43c0233F2",
+			Pk:      "289d095a1a421acb6498fecc656f5712d9aa95f63e8d9b321e162f28a2590f6f",
+		}
 
-	e.Send(tradeEnginePID, order1)
-	e.Send(tradeEnginePID, order2)
-
+		e.Send(tradeEnginePID, o)
+	}
 	// time.Sleep(time.Second * 5)
 	// e.Send(tradeEnginePID, &tEngine.CancelOrderRequest{ID: trade1.TradeID})
 
