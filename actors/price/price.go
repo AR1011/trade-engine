@@ -80,7 +80,7 @@ func (pw *priceWatcher) init() {
 	for {
 		// check if the last call was more than 30 seconds ago
 		if pw.lastCall < time.Now().UnixMilli()-(time.Second.Milliseconds()*30) {
-			pw.logger.Info("Inactivity: Killing Price Watcher", "ticker", pw.ticker, "callCount", pw.callCount)
+			pw.logger.Error("Inactivity: Killing Price Watcher", "ticker", pw.ticker, "callCount", pw.callCount)
 
 			// if no call in 30 seconds => kill itself
 			pw.Kill()
@@ -114,6 +114,7 @@ func NewPriceActor(opts PriceOptions) actor.Producer {
 			logger: logger.NewLogger(
 				logger.PWat,
 				logger.DPURPLE,
+				logger.ERROR,
 				logger.WithToStdoutWriter(),
 				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
 			),

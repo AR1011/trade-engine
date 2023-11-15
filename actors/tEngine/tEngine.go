@@ -91,6 +91,7 @@ func NewTradeEngine() actor.Producer {
 			logger: logger.NewLogger(
 				logger.TEng,
 				logger.DBLUE,
+				logger.ERROR,
 				logger.WithToStdoutWriter(),
 				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
 			),

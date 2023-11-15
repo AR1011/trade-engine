@@ -104,7 +104,7 @@ func (te *tradeExecutor) init(c *actor.Context) {
 		}
 
 		// get the price from the price actor, 1s timeout
-		response := c.Request(te.priceWatcherPID, price.FetchPriceRequest{}, time.Second)
+		response := c.Request(te.priceWatcherPID, price.FetchPriceRequest{}, time.Second*2)
 
 		// wait for result
 		result, err := response.Result()
@@ -163,6 +163,7 @@ func NewExecutorActor(opts *ExecutorOptions) actor.Producer {
 			logger: logger.NewLogger(
 				logger.TExc,
 				logger.DGREEN,
+				logger.ERROR,
 				logger.WithToStdoutWriter(),
 				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
 			),

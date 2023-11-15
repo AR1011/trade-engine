@@ -11,6 +11,14 @@ type Logger interface {
 	Error(string, ...interface{})
 }
 
+type LogLevel int
+
+const (
+	INFO LogLevel = iota
+	WARN
+	ERROR
+)
+
 type Log struct {
 	Type      string        `json:"type"`
 	TypeColor string        `json:"-"`
@@ -26,13 +34,15 @@ type SLogger struct {
 	writers   []Writer
 	color     string
 	actorName string
+	level     LogLevel
 }
 
-func NewLogger(actorName string, color string, writers ...Writer) *SLogger {
+func NewLogger(actorName string, color string, level LogLevel, writers ...Writer) *SLogger {
 	return &SLogger{
 		writers:   writers,
 		color:     color,
 		actorName: actorName,
+		level:     level,
 	}
 }
 
@@ -48,7 +58,9 @@ func (s *SLogger) Info(msg string, args ...interface{}) {
 	}
 	log.Str = s.toString(log)
 
-	s.write(log)
+	if s.level <= INFO {
+		s.write(log)
+	}
 }
 
 func (s *SLogger) Warn(msg string, args ...interface{}) {
@@ -63,7 +75,9 @@ func (s *SLogger) Warn(msg string, args ...interface{}) {
 	}
 	log.Str = s.toString(log)
 
-	s.write(log)
+	if s.level <= WARN {
+		s.write(log)
+	}
 }
 
 func (s *SLogger) Error(msg string, args ...interface{}) {
@@ -78,7 +92,9 @@ func (s *SLogger) Error(msg string, args ...interface{}) {
 	}
 	log.Str = s.toString(log)
 
-	s.write(log)
+	if s.level <= ERROR {
+		s.write(log)
+	}
 }
 
 func (s *SLogger) write(l *Log) {

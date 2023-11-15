@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log/slog"
 	"os"
 	"time"
@@ -13,12 +14,13 @@ import (
 )
 
 func main() {
-	lh := log.NewHandler(os.Stdout, log.TextFormat, slog.LevelDebug)
+	lh := log.NewHandler(os.Stdout, log.TextFormat, slog.LevelError)
 	e := actor.NewEngine(actor.Config{Logger: log.NewLogger("[engine]", lh)})
 
 	tradeEnginePID := e.Spawn(tEngine.NewTradeEngine(), "trade-engine")
 
 	for i := 0; i < 20; i++ {
+		time.Sleep(time.Millisecond * 2)
 		o := &tEngine.TradeOrderRequest{
 			TradeID: uuid.New().String(),
 			Token0:  "0x000000000000000000",
@@ -30,9 +32,10 @@ func main() {
 
 		e.Send(tradeEnginePID, o)
 	}
+	fmt.Println("done")
 	// time.Sleep(time.Second * 5)
 	// e.Send(tradeEnginePID, &tEngine.CancelOrderRequest{ID: trade1.TradeID})
 
-	time.Sleep(time.Second * 50000)
+	select {}
 
 }
