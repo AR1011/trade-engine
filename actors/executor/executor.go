@@ -30,6 +30,7 @@ type ExecutorOptions struct {
 	Chain           string
 	Wallet          string
 	Pk              string
+	Expires         int64
 }
 
 type tradeExecutor struct {
@@ -38,6 +39,7 @@ type tradeExecutor struct {
 	PID             *actor.PID
 	priceWatcherPID *actor.PID
 	logger          logger.Logger
+	Expires         int64
 	status          string
 	ticker          string
 	token0          string
@@ -47,6 +49,7 @@ type tradeExecutor struct {
 	pk              string
 	price           float64 // will be decimal
 	active          bool
+
 	// ... will contain more
 	// will also contain runtime vars
 }
@@ -90,13 +93,14 @@ func (te *tradeExecutor) init(c *actor.Context) {
 			return
 		}
 
-		// for demo / testing, after 5 iterations, kill the actor
-		if i > 5 {
+		if time.Now().UnixMilli() > te.Expires {
+			te.logger.Warn("Trade Expired", "id", te.id, "wallet", te.wallet)
 			te.Finished()
 			return
 		}
 
-		time.Sleep(time.Second * 5)
+		// refresh price every 2s
+		time.Sleep(time.Second * 2)
 
 		if (te.priceWatcherPID == nil) || (te.priceWatcherPID == &actor.PID{}) {
 			te.logger.Error("priceWatcherPID is <nil>")
@@ -160,6 +164,7 @@ func NewExecutorActor(opts *ExecutorOptions) actor.Producer {
 			wallet:          opts.Wallet,
 			pk:              opts.Pk,
 			priceWatcherPID: opts.PriceWatcherPID,
+			Expires:         opts.Expires,
 			logger: logger.NewLogger(
 				logger.TradeExecutor,
 				logger.ColorDarkGreen,

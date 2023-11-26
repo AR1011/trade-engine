@@ -21,6 +21,7 @@ type TradeOrderRequest struct {
 	Chain   string
 	Wallet  string
 	Pk      string
+	Expires int64
 }
 
 type CancelOrderRequest struct {
@@ -58,6 +59,7 @@ func (t *tradeEngine) spawnExecutor(msg *TradeOrderRequest, c *actor.Context) {
 		Chain:           msg.Chain,
 		Wallet:          msg.Wallet,
 		Pk:              msg.Pk,
+		Expires:         msg.Expires,
 	}
 
 	// spawn the actor
