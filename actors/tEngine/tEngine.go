@@ -89,11 +89,11 @@ func NewTradeEngine() actor.Producer {
 	return func() actor.Receiver {
 		return &tradeEngine{
 			logger: logger.NewLogger(
-				logger.TEng,
-				logger.DBLUE,
-				logger.ERROR,
+				logger.TradeEngine,
+				logger.ColorDarkBlue,
+				logger.LevelInfo,
 				logger.WithToStdoutWriter(),
-				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
+				logger.WithToFileWriter("./logs/trade-engine.log", logger.JsonFormat),
 			),
 		}
 	}

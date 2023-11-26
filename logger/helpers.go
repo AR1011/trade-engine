@@ -5,28 +5,29 @@ import (
 )
 
 const (
-	DBLUE   = "\u001b[38;2;0;51;204m"
-	DGREEN  = "\033[38;2;0;153;0m"
-	DPURPLE = "\033[38;2;102;0;153m"
-	GREEN   = "\033[32m"
-	BLUE    = "\033[34m"
-	RED     = "\033[31m"
-	ORANGE  = "\033[33m"
-	PURPLE  = "\033[35m"
-	YELLOW  = "\033[93m"
-	PINK    = "\033[95m"
-	WHITE   = "\033[0m"
-	BOLD    = "\u001b[1m"
-	NORMAL  = "\u001b[0m"
+	ColorDarkBlue   = "\u001b[38;2;0;51;204m"
+	ColorDarkGreen  = "\033[38;2;0;153;0m"
+	ColorDarkPurple = "\033[38;2;102;0;153m"
+	ColorGreen      = "\033[32m"
+	ColorBlue       = "\033[34m"
+	ColorRed        = "\033[31m"
+	ColorOrange     = "\033[33m"
+	ColorPurple     = "\033[35m"
+	ColorYellow     = "\033[93m"
+	ColorPink       = "\033[95m"
+	ColorWhite      = "\033[0m"
+	FontBold        = "\u001b[1m"
+	FontNormal      = "\u001b[0m"
 )
 
 var (
-	PWat = "[ PRICE  WATCHER ]"
-	TEng = "[  TRADE ENGINE  ]"
-	TExc = "[ TRADE EXECUTOR ]"
+	PriceWatcher  = "[ PRICE  WATCHER ]"
+	TradeEngine   = "[  TRADE ENGINE  ]"
+	TradeExecutor = "[ TRADE EXECUTOR ]"
 )
 
 func pad(s string) string {
+	// pads the string to 40 characters
 	l := 40
 
 	paddedString := " " + s

@@ -14,13 +14,14 @@ type Logger interface {
 type LogLevel int
 
 const (
-	INFO LogLevel = iota
-	WARN
-	ERROR
+	LevelInfo LogLevel = iota
+	LevelWarn
+	LevelError
 )
 
 type Log struct {
 	Type      string        `json:"type"`
+	Actor     string        `json:"actor"`
 	TypeColor string        `json:"-"`
 	Time      string        `json:"time"`
 	Timestamp int64         `json:"timestamp"`
@@ -49,7 +50,8 @@ func NewLogger(actorName string, color string, level LogLevel, writers ...Writer
 func (s *SLogger) Info(msg string, args ...interface{}) {
 	log := &Log{
 		Type:      "INFO",
-		TypeColor: BLUE,
+		Actor:     s.actorName,
+		TypeColor: ColorBlue,
 		Time:      GetTime(),
 		Timestamp: time.Now().UnixMilli(),
 		Msg:       msg,
@@ -58,7 +60,7 @@ func (s *SLogger) Info(msg string, args ...interface{}) {
 	}
 	log.Str = s.toString(log)
 
-	if s.level <= INFO {
+	if s.level <= LevelInfo {
 		s.write(log)
 	}
 }
@@ -66,7 +68,8 @@ func (s *SLogger) Info(msg string, args ...interface{}) {
 func (s *SLogger) Warn(msg string, args ...interface{}) {
 	log := &Log{
 		Type:      "WARN",
-		TypeColor: ORANGE,
+		Actor:     s.actorName,
+		TypeColor: ColorOrange,
 		Time:      GetTime(),
 		Timestamp: time.Now().UnixMilli(),
 		Msg:       msg,
@@ -75,15 +78,16 @@ func (s *SLogger) Warn(msg string, args ...interface{}) {
 	}
 	log.Str = s.toString(log)
 
-	if s.level <= WARN {
+	if s.level <= LevelWarn {
 		s.write(log)
 	}
 }
 
 func (s *SLogger) Error(msg string, args ...interface{}) {
 	log := &Log{
-		Type:      "ERROR",
-		TypeColor: RED,
+		Type:      "EROR",
+		Actor:     s.actorName,
+		TypeColor: ColorRed,
 		Time:      GetTime(),
 		Timestamp: time.Now().UnixMilli(),
 		Msg:       msg,
@@ -92,7 +96,7 @@ func (s *SLogger) Error(msg string, args ...interface{}) {
 	}
 	log.Str = s.toString(log)
 
-	if s.level <= ERROR {
+	if s.level <= LevelError {
 		s.write(log)
 	}
 }
@@ -126,10 +130,10 @@ func argsToString(args []interface{}) []string {
 func (s *SLogger) toString(log *Log) string {
 	var logStr string
 
-	logStr += BOLD + log.TypeColor + "[" + log.Type + "]" + NORMAL
-	logStr += WHITE + " [" + log.Time + "]"
+	logStr += FontBold + log.TypeColor + "[" + log.Type + "]" + FontNormal
+	logStr += ColorWhite + " [" + log.Time + "]"
 	logStr += log.MsgColor + " " + s.actorName + " "
-	logStr += pad(log.Msg) + WHITE
+	logStr += pad(log.Msg) + ColorWhite
 
 	if len(log.Args) > 0 {
 		logStr += fmt.Sprintf(" %v", argsToString(log.Args))

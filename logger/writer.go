@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	JSON = "json"
-	TEXT = "text"
+	JsonFormat = "json"
+	TextFormat = "text"
 )
 
 type Writer interface {
@@ -39,14 +39,14 @@ func (w *ToFileWriter) Write(l *Log) error {
 	var err error
 
 	switch w.Format {
-	case JSON:
+	case JsonFormat:
 		b, err = json.Marshal(l)
 		if err != nil {
 			return err
 		}
 		b = append(b, '\n')
 
-	case TEXT:
+	case TextFormat:
 		b = []byte(l.Str)
 		ansi := regexp.MustCompile(`\x1b\[[0-9;]*m`)
 		b = ansi.ReplaceAll(b, []byte{})
@@ -61,7 +61,11 @@ func (w *ToFileWriter) Write(l *Log) error {
 
 	f, err := w.openFile()
 
-	defer f.Close()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println(ColorRed + "[ERROR] " + "Error closing file: " + err.Error() + ColorWhite)
+		}
+	}()
 
 	if _, err := f.Write(b); err != nil {
 		return err
@@ -69,22 +73,29 @@ func (w *ToFileWriter) Write(l *Log) error {
 	return nil
 }
 
+func (w *ToFileWriter) makeDir() (*os.File, error) {
+	fmt.Println(ColorOrange + "[WARN] " + "Log file does not exist. Creating..." + ColorWhite)
+	dir := filepath.Dir(w.FileName)
+
+	if mkdirErr := os.MkdirAll(dir, 0755); mkdirErr != nil {
+		return nil, mkdirErr
+	}
+
+	f, err := os.OpenFile(w.FileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return nil, err
+	}
+
+	return f, nil
+}
+
 func (w *ToFileWriter) openFile() (*os.File, error) {
 	f, err := os.OpenFile(w.FileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		if os.IsNotExist(err) {
-			fmt.Println(ORANGE + "[WARN] " + "Log file does not exist. Creating..." + WHITE)
-			dir := filepath.Dir(w.FileName)
-			if mkdirErr := os.MkdirAll(dir, 0755); mkdirErr != nil {
-				return nil, mkdirErr
-			}
-			f, err = os.OpenFile(w.FileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-			if err != nil {
-				return nil, err
-			}
-		} else {
-			return nil, err
+			return w.makeDir()
 		}
+		return nil, err
 	}
 	return f, nil
 }

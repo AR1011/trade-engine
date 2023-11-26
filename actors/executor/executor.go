@@ -161,11 +161,11 @@ func NewExecutorActor(opts *ExecutorOptions) actor.Producer {
 			pk:              opts.Pk,
 			priceWatcherPID: opts.PriceWatcherPID,
 			logger: logger.NewLogger(
-				logger.TExc,
-				logger.DGREEN,
-				logger.ERROR,
+				logger.TradeExecutor,
+				logger.ColorDarkGreen,
+				logger.LevelInfo,
 				logger.WithToStdoutWriter(),
-				logger.WithToFileWriter("./logs/trade-engine.log", logger.JSON),
+				logger.WithToFileWriter("./logs/trade-engine.log", logger.JsonFormat),
 			),
 		}
 	}

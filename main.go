@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log/slog"
 	"os"
 	"time"
@@ -32,7 +31,7 @@ func main() {
 
 		e.Send(tradeEnginePID, o)
 	}
-	fmt.Println("done")
+
 	// time.Sleep(time.Second * 5)
 	// e.Send(tradeEnginePID, &tEngine.CancelOrderRequest{ID: trade1.TradeID})
 
