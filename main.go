@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/AR1011/trade-engine/actors/tEngine"
+	"github.com/AR1011/trade-engine/actors/tradeEngine"
 	"github.com/anthdm/hollywood/actor"
 	"github.com/anthdm/hollywood/log"
 
@@ -16,11 +16,11 @@ func main() {
 	lh := log.NewHandler(os.Stdout, log.TextFormat, slog.LevelError)
 	e := actor.NewEngine(actor.EngineOptLogger(log.NewLogger("[engine]", lh)))
 
-	tradeEnginePID := e.Spawn(tEngine.NewTradeEngine(), "trade-engine")
+	tradeEnginePID := e.Spawn(tradeEngine.NewTradeEngine(), "trade-engine")
 
 	for i := 0; i < 20; i++ {
 		time.Sleep(time.Millisecond * 2)
-		o := &tEngine.TradeOrderRequest{
+		o := &tradeEngine.TradeOrderRequest{
 			TradeID: uuid.New().String(),
 			Token0:  "0x000000000000000000",
 			Token1:  "0x111111111111111111",

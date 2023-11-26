@@ -120,7 +120,7 @@ func (te *tradeExecutor) init(c *actor.Context) {
 
 		switch r := result.(type) {
 		case *price.FetchPriceResponse:
-			te.logger.Info("Got Price Response", "price", r.Price)
+			te.logger.Info("Got Price Response", "price", r.Price.StringFixed(18))
 		default:
 			te.logger.Warn("Got Invalid Type from priceWatcher", "type", reflect.TypeOf(r))
 

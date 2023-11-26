@@ -6,6 +6,7 @@ import (
 
 	"github.com/AR1011/trade-engine/logger"
 	"github.com/anthdm/hollywood/actor"
+	"github.com/shopspring/decimal"
 )
 
 type PriceOptions struct {
@@ -19,7 +20,7 @@ type FetchPriceRequest struct{}
 
 type FetchPriceResponse struct {
 	Iat   int64
-	Price float64
+	Price decimal.Decimal
 }
 
 type priceWatcher struct {
@@ -29,7 +30,7 @@ type priceWatcher struct {
 	token0      string
 	token1      string
 	chain       string
-	lastPrice   float64 // will use decimal in real
+	lastPrice   decimal.Decimal // will use decimal in real
 	updatedAt   int64
 	lastCall    int64
 	callCount   uint64
@@ -76,6 +77,7 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 }
 
 func (pw *priceWatcher) init() {
+	pw.lastPrice = decimal.NewFromInt(0)
 	// mimic getting price every 2 seconds
 	for {
 		// check if the last call was more than 10 seconds ago
@@ -87,8 +89,8 @@ func (pw *priceWatcher) init() {
 			return // stops goroutine
 		}
 
-		time.Sleep(time.Second * 2)
-		pw.lastPrice++
+		time.Sleep(time.Millisecond * 2)
+		pw.lastPrice = pw.lastPrice.Add(decimal.NewFromFloat(1))
 		pw.updatedAt = time.Now().UnixMilli()
 
 	}
