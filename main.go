@@ -14,7 +14,7 @@ import (
 
 func main() {
 	lh := log.NewHandler(os.Stdout, log.TextFormat, slog.LevelError)
-	e := actor.NewEngine(actor.Config{Logger: log.NewLogger("[engine]", lh)})
+	e := actor.NewEngine(actor.EngineOptLogger(log.NewLogger("[engine]", lh)))
 
 	tradeEnginePID := e.Spawn(tEngine.NewTradeEngine(), "trade-engine")
 

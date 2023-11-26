@@ -78,11 +78,11 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 func (pw *priceWatcher) init() {
 	// mimic getting price every 2 seconds
 	for {
-		// check if the last call was more than 30 seconds ago
-		if pw.lastCall < time.Now().UnixMilli()-(time.Second.Milliseconds()*30) {
+		// check if the last call was more than 10 seconds ago
+		if pw.lastCall < time.Now().UnixMilli()-(time.Second.Milliseconds()*10) {
 			pw.logger.Warn("Inactivity: Killing Price Watcher", "ticker", pw.ticker, "callCount", pw.callCount)
 
-			// if no call in 30 seconds => kill itself
+			// if no call in 10 seconds => kill itself
 			pw.Kill()
 			return // stops goroutine
 		}

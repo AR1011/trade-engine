@@ -11,7 +11,7 @@
 2. Price Watcher: Actor that will get the price for a given ticker. There will only be one actor for each ticker to save on resources.
 
    - The Price Watcher starts a go routine on `actor.Initialised` message. The go routine refreshes the price every x seconds.
-   - If after 30 seconds no one has requested the latest price, the go routine is stopped and the actor is poisoned.
+   - If after 10 seconds no one has requested the latest price, the go routine is stopped and the actor is poisoned.
 
 3. Trade Executor: Actor that will execute trades. There will be one actor for each trade.
    - Similar to Price Watcher, the Trade Executor will create a go routine on `actor.Initialised` message.
