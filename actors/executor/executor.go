@@ -133,7 +133,7 @@ func (te *tradeExecutor) Finished() {
 	// set the flag to flase so goroutine terminates
 	te.active = false
 
-	// make sure tradeEnginePID and actorEngine are safe
+	// make sure actorEngine is safe
 	if te.actorEngine == nil {
 		slog.Error("actorEngine is <nil>")
 
