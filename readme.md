@@ -1,7 +1,7 @@
 # trade-engine example demo
 
 <p align="center">
-  <img src="assets/diagram.png" alt="diagram" width="100%">
+  <img src="diagram.png" alt="diagram" width="100%">
 </p>
 
 ## There are 3 actor types:
