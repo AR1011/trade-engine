@@ -2,15 +2,14 @@ package tradeEngine
 
 import (
 	"fmt"
+	"log/slog"
 
 	"github.com/AR1011/trade-engine/actors/executor"
 	"github.com/AR1011/trade-engine/actors/price"
-	"github.com/AR1011/trade-engine/logger"
 	"github.com/anthdm/hollywood/actor"
 )
 
 type tradeEngine struct {
-	logger logger.Logger
 }
 
 type TradeOrderRequest struct {
@@ -31,15 +30,14 @@ type CancelOrderRequest struct {
 func (t *tradeEngine) Receive(c *actor.Context) {
 	switch msg := c.Message().(type) {
 	case actor.Stopped:
-		// should propogate to children and kill them
 
-	case actor.Initialized:
-		t.logger.Info("Init Trade Engine")
+	case actor.Started:
+		slog.Info("Started Trade Engine")
 		_ = msg
 
 	case *TradeOrderRequest:
 		// got new trade order, create the executor
-		t.logger.Info("Got New Trade Order", "id", msg.TradeID, "wallet", msg.Wallet)
+		slog.Info("Got New Trade Order", "id", msg.TradeID, "wallet", msg.Wallet)
 		t.spawnExecutor(msg, c)
 
 	}
@@ -89,15 +87,7 @@ func (t *tradeEngine) ensurePriceStream(order *TradeOrderRequest, c *actor.Conte
 
 func NewTradeEngine() actor.Producer {
 	return func() actor.Receiver {
-		return &tradeEngine{
-			logger: logger.NewLogger(
-				logger.TradeEngine,
-				logger.ColorDarkBlue,
-				logger.LevelInfo,
-				logger.WithToStdoutWriter(),
-				logger.WithToFileWriter("./logs/trade-engine.log", logger.JsonFormat),
-			),
-		}
+		return &tradeEngine{}
 	}
 }
 

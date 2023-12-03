@@ -1,10 +1,10 @@
 package price
 
 import (
+	"log/slog"
 	"reflect"
 	"time"
 
-	"github.com/AR1011/trade-engine/logger"
 	"github.com/anthdm/hollywood/actor"
 	"github.com/shopspring/decimal"
 )
@@ -34,7 +34,6 @@ type priceWatcher struct {
 	updatedAt   int64
 	lastCall    int64
 	callCount   uint64
-	logger      logger.Logger
 	// will contain more stuff
 }
 
@@ -44,7 +43,7 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 	case actor.Started:
 
 	case actor.Initialized:
-		pw.logger.Info("Init Price Actor", "ticker", pw.ticker)
+		slog.Info("Init Price Actor", "ticker", pw.ticker)
 
 		pw.actorEngine = c.Engine()
 		pw.lastCall = time.Now().UnixMilli()
@@ -54,10 +53,10 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 		go pw.init()
 
 	case actor.Stopped:
-		pw.logger.Info("Stopped Price Actor", "ticker", pw.ticker)
+		slog.Info("Stopped Price Actor", "ticker", pw.ticker)
 
 	case FetchPriceRequest:
-		pw.logger.Info("Fetching Price Request", "ticker", pw.ticker)
+		slog.Info("Fetching Price Request", "ticker", pw.ticker)
 
 		// update last called time
 		pw.lastCall = time.Now().UnixMilli()
@@ -70,7 +69,7 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 		})
 
 	default:
-		pw.logger.Warn("Got Invalid Message Type", "ticker", pw.ticker, "type", reflect.TypeOf(msg))
+		slog.Warn("Got Invalid Message Type", "ticker", pw.ticker, "type", reflect.TypeOf(msg))
 
 		_ = msg
 	}
@@ -82,7 +81,7 @@ func (pw *priceWatcher) init() {
 	for {
 		// check if the last call was more than 10 seconds ago
 		if pw.lastCall < time.Now().UnixMilli()-(time.Second.Milliseconds()*10) {
-			pw.logger.Warn("Inactivity: Killing Price Watcher", "ticker", pw.ticker, "callCount", pw.callCount)
+			slog.Warn("Inactivity: Killing Price Watcher", "ticker", pw.ticker, "callCount", pw.callCount)
 
 			// if no call in 10 seconds => kill itself
 			pw.Kill()
@@ -101,7 +100,7 @@ func (pw *priceWatcher) Kill() {
 	// and poision the actor
 
 	if pw.actorEngine == nil {
-		pw.logger.Error("actorEngine is <nil>", "ticker", pw.ticker)
+		slog.Error("actorEngine is <nil>", "ticker", pw.ticker)
 	}
 	pw.actorEngine.Poison(pw.PID)
 }
@@ -113,13 +112,6 @@ func NewPriceActor(opts PriceOptions) actor.Producer {
 			token0: opts.Token0,
 			token1: opts.Token1,
 			chain:  opts.Chain,
-			logger: logger.NewLogger(
-				logger.PriceWatcher,
-				logger.ColorDarkPurple,
-				logger.LevelInfo,
-				logger.WithToStdoutWriter(),
-				logger.WithToFileWriter("./logs/trade-engine.log", logger.JsonFormat),
-			),
 		}
 	}
 }

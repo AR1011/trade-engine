@@ -13,12 +13,12 @@ import (
 )
 
 func main() {
-	lh := log.NewHandler(os.Stdout, log.TextFormat, slog.LevelError)
+	lh := log.NewHandler(os.Stdout, log.TextFormat, slog.LevelInfo)
 	e := actor.NewEngine(actor.EngineOptLogger(log.NewLogger("[engine]", lh)))
 
 	tradeEnginePID := e.Spawn(tradeEngine.NewTradeEngine(), "trade-engine")
 
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 5; i++ {
 		time.Sleep(time.Millisecond * 2)
 		o := &tradeEngine.TradeOrderRequest{
 			TradeID: uuid.New().String(),

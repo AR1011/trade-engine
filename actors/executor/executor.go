@@ -1,12 +1,13 @@
 package executor
 
 import (
+	"log/slog"
 	"reflect"
 	"time"
 
 	"github.com/AR1011/trade-engine/actors/price"
-	"github.com/AR1011/trade-engine/logger"
 	"github.com/anthdm/hollywood/actor"
+	"github.com/shopspring/decimal"
 )
 
 // message to get trade info
@@ -18,7 +19,7 @@ type TradeInfoResponse struct {
 	// eg price, pnl, etc
 	foo   int
 	bar   int
-	price float64 // will be decimal
+	price decimal.Decimal
 }
 
 type ExecutorOptions struct {
@@ -38,7 +39,6 @@ type tradeExecutor struct {
 	actorEngine     *actor.Engine
 	PID             *actor.PID
 	priceWatcherPID *actor.PID
-	logger          logger.Logger
 	Expires         int64
 	status          string
 	ticker          string
@@ -47,17 +47,14 @@ type tradeExecutor struct {
 	chain           string
 	wallet          string
 	pk              string
-	price           float64 // will be decimal
+	price           decimal.Decimal
 	active          bool
-
-	// ... will contain more
-	// will also contain runtime vars
 }
 
 func (te *tradeExecutor) Receive(c *actor.Context) {
 	switch msg := c.Message().(type) {
-	case actor.Initialized:
-		te.logger.Info("Init Trade Executor Actor", "id", te.id, "wallet", te.wallet)
+	case actor.Started:
+		slog.Info("Started Trade Executor Actor", "id", te.id, "wallet", te.wallet)
 
 		// set flag for goroutine
 		te.active = true
@@ -69,11 +66,11 @@ func (te *tradeExecutor) Receive(c *actor.Context) {
 		go te.init(c)
 
 	case actor.Stopped:
-		te.logger.Info("Stopped Trade Executor Actor", "id", te.id, "wallet", te.wallet)
+		slog.Info("Stopped Trade Executor Actor", "id", te.id, "wallet", te.wallet)
 		te.active = false
 
 	case TradeInfoRequest:
-		te.logger.Info("Got TradeInfoRequest", "id", te.id, "wallet", te.wallet)
+		slog.Info("Got TradeInfoRequest", "id", te.id, "wallet", te.wallet)
 		te.tradeInfo(c)
 
 	default:
@@ -83,8 +80,7 @@ func (te *tradeExecutor) Receive(c *actor.Context) {
 }
 
 func (te *tradeExecutor) init(c *actor.Context) {
-	// JUST A SAMPLE
-
+	// example of a long running process
 	var i int
 
 	for {
@@ -94,7 +90,7 @@ func (te *tradeExecutor) init(c *actor.Context) {
 		}
 
 		if time.Now().UnixMilli() > te.Expires {
-			te.logger.Warn("Trade Expired", "id", te.id, "wallet", te.wallet)
+			slog.Warn("Trade Expired", "id", te.id, "wallet", te.wallet)
 			te.Finished()
 			return
 		}
@@ -103,26 +99,25 @@ func (te *tradeExecutor) init(c *actor.Context) {
 		time.Sleep(time.Second * 2)
 
 		if (te.priceWatcherPID == nil) || (te.priceWatcherPID == &actor.PID{}) {
-			te.logger.Error("priceWatcherPID is <nil>")
+			slog.Error("priceWatcherPID is <nil>")
 			return
 		}
 
-		// get the price from the price actor, 1s timeout
+		// get the price from the price actor, 2s timeout
 		response := c.Request(te.priceWatcherPID, price.FetchPriceRequest{}, time.Second*2)
 
 		// wait for result
 		result, err := response.Result()
 		if err != nil {
-			// fuck!!
-			te.logger.Error("Error getting price response", "error", err.Error())
+			slog.Error("Error getting price response", "error", err.Error())
 			return
 		}
 
 		switch r := result.(type) {
 		case *price.FetchPriceResponse:
-			te.logger.Info("Got Price Response", "price", r.Price.StringFixed(18))
+			slog.Info("Got Price Response", "price", r.Price.StringFixed(18))
 		default:
-			te.logger.Warn("Got Invalid Type from priceWatcher", "type", reflect.TypeOf(r))
+			slog.Warn("Got Invalid Type from priceWatcher", "type", reflect.TypeOf(r))
 
 		}
 		i++
@@ -147,7 +142,7 @@ func (te *tradeExecutor) Finished() {
 	// make sure tradeEnginePID and actorEngine are safe
 
 	if te.actorEngine == nil {
-		te.logger.Error("actorEngine is <nil>")
+		slog.Error("actorEngine is <nil>")
 
 	}
 	te.actorEngine.Poison(te.PID)
@@ -165,13 +160,7 @@ func NewExecutorActor(opts *ExecutorOptions) actor.Producer {
 			pk:              opts.Pk,
 			priceWatcherPID: opts.PriceWatcherPID,
 			Expires:         opts.Expires,
-			logger: logger.NewLogger(
-				logger.TradeExecutor,
-				logger.ColorDarkGreen,
-				logger.LevelInfo,
-				logger.WithToStdoutWriter(),
-				logger.WithToFileWriter("./logs/trade-engine.log", logger.JsonFormat),
-			),
+			status:          "pending",
 		}
 	}
 }
