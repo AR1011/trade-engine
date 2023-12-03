@@ -24,7 +24,7 @@ type TradeInfoResponse struct {
 
 type ExecutorOptions struct {
 	PriceWatcherPID *actor.PID
-	TradeID         string //uuid string
+	TradeID         string
 	Ticker          string
 	Token0          string
 	Token1          string
@@ -35,7 +35,7 @@ type ExecutorOptions struct {
 }
 
 type tradeExecutor struct {
-	id              string // uuid string
+	id              string
 	actorEngine     *actor.Engine
 	PID             *actor.PID
 	priceWatcherPID *actor.PID
@@ -63,7 +63,7 @@ func (te *tradeExecutor) Receive(c *actor.Context) {
 		te.PID = c.PID()
 
 		// start the trade process
-		go te.init(c)
+		go te.start(c)
 
 	case actor.Stopped:
 		slog.Info("Stopped Trade Executor Actor", "id", te.id, "wallet", te.wallet)
@@ -79,10 +79,8 @@ func (te *tradeExecutor) Receive(c *actor.Context) {
 	}
 }
 
-func (te *tradeExecutor) init(c *actor.Context) {
+func (te *tradeExecutor) start(c *actor.Context) {
 	// example of a long running process
-	var i int
-
 	for {
 		// check flag. Will be false if actor is killed
 		if !te.active {
@@ -120,7 +118,6 @@ func (te *tradeExecutor) init(c *actor.Context) {
 			slog.Warn("Got Invalid Type from priceWatcher", "type", reflect.TypeOf(r))
 
 		}
-		i++
 	}
 }
 
@@ -133,14 +130,10 @@ func (te *tradeExecutor) tradeInfo(c *actor.Context) {
 }
 
 func (te *tradeExecutor) Finished() {
-	// set the flag to flase so goroutine returns
+	// set the flag to flase so goroutine terminates
 	te.active = false
 
-	// send kill request to the trade engine so it can remove it from maps
-	// and poision the actor
-
 	// make sure tradeEnginePID and actorEngine are safe
-
 	if te.actorEngine == nil {
 		slog.Error("actorEngine is <nil>")
 

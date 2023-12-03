@@ -30,27 +30,24 @@ type priceWatcher struct {
 	token0      string
 	token1      string
 	chain       string
-	lastPrice   decimal.Decimal // will use decimal in real
+	lastPrice   decimal.Decimal
 	updatedAt   int64
 	lastCall    int64
 	callCount   uint64
-	// will contain more stuff
 }
 
 func (pw *priceWatcher) Receive(c *actor.Context) {
 
 	switch msg := c.Message().(type) {
 	case actor.Started:
-
-	case actor.Initialized:
-		slog.Info("Init Price Actor", "ticker", pw.ticker)
+		slog.Info("Started Price Actor", "ticker", pw.ticker)
 
 		pw.actorEngine = c.Engine()
 		pw.lastCall = time.Now().UnixMilli()
 		pw.PID = c.PID()
 
 		// start updating the price
-		go pw.init()
+		go pw.start()
 
 	case actor.Stopped:
 		slog.Info("Stopped Price Actor", "ticker", pw.ticker)
@@ -60,6 +57,8 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 
 		// update last called time
 		pw.lastCall = time.Now().UnixMilli()
+
+		// increment call count
 		pw.callCount++
 
 		// respond with the lastest price
@@ -70,13 +69,13 @@ func (pw *priceWatcher) Receive(c *actor.Context) {
 
 	default:
 		slog.Warn("Got Invalid Message Type", "ticker", pw.ticker, "type", reflect.TypeOf(msg))
-
 		_ = msg
 	}
 }
 
-func (pw *priceWatcher) init() {
+func (pw *priceWatcher) start() {
 	pw.lastPrice = decimal.NewFromInt(0)
+
 	// mimic getting price every 2 seconds
 	for {
 		// check if the last call was more than 10 seconds ago

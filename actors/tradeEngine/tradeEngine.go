@@ -13,14 +13,13 @@ type tradeEngine struct {
 }
 
 type TradeOrderRequest struct {
-	//will contain more
-	TradeID string //uuid string
-	Token0  string
-	Token1  string
-	Chain   string
-	Wallet  string
-	Pk      string
-	Expires int64
+	TradeID    string
+	Token0     string
+	Token1     string
+	Chain      string
+	Wallet     string
+	PrivateKey string
+	Expires    int64
 }
 
 type CancelOrderRequest struct {
@@ -30,6 +29,7 @@ type CancelOrderRequest struct {
 func (t *tradeEngine) Receive(c *actor.Context) {
 	switch msg := c.Message().(type) {
 	case actor.Stopped:
+		slog.Info("Stopped Trade Engine")
 
 	case actor.Started:
 		slog.Info("Started Trade Engine")
@@ -56,7 +56,7 @@ func (t *tradeEngine) spawnExecutor(msg *TradeOrderRequest, c *actor.Context) {
 		Token1:          msg.Token1,
 		Chain:           msg.Chain,
 		Wallet:          msg.Wallet,
-		Pk:              msg.Pk,
+		Pk:              msg.PrivateKey,
 		Expires:         msg.Expires,
 	}
 
